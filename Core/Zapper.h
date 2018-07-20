@@ -6,6 +6,8 @@
 #include "PPU.h"
 #include "MemoryManager.h"
 
+static bool zapper_start_up = false;
+
 class Zapper : public BaseControlDevice
 {
 protected:
@@ -22,6 +24,7 @@ protected:
 	{
 		if(_console->GetSettings()->InputEnabled()) {
 			SetPressedState(Buttons::Fire, KeyManager::IsMouseButtonPressed(MouseButton::LeftButton));
+
 		}
 
 		MousePosition pos = KeyManager::GetMousePosition();
@@ -34,7 +37,20 @@ protected:
 
 	bool IsLightFound()
 	{
-		return StaticIsLightFound(GetCoordinates(), _console);
+		//return StaticIsLightFound(GetCoordinates(), _console);
+		if(KeyManager::IsMouseButtonPressed(MouseButton::LeftButton)){
+		   if(KeyManager::IsMouseButtonPressed(MouseButton::RightButton)){
+		     if (zapper_start_up == false){
+		        zapper_start_up = true;
+		     }
+		      if (zapper_start_up == true){
+		     zapper_start_up = false;
+		     return true;
+		     }
+		   }
+		   return false;
+		}
+		return true;
 	}
 
 public:
